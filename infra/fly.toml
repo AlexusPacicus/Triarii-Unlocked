@@ -1,0 +1,12 @@
+# fly.toml app configuration file generated for sandlock-boundary
+
+app = "sandlock-distributed-boundary"
+primary_region = "ams"
+
+[http_service]
+  internal_port = 80
+  force_https = true
+  auto_stop_machines = true # Automatically scale to zero when idle to prevent credit drain
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
