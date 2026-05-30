@@ -11,7 +11,7 @@ DEFAULT_POLICY = [
 
 def evaluate_agent_proposal(proposal_json_str, policy_json_str=None):
     """
-    Sandlock Core Engine (Deterministic Execution Gateway).
+    Triarii Core Engine (Deterministic Execution Gateway).
     """
     try:
         # Dynamic matrix reconstruction from the analyst JSON input string

@@ -57,4 +57,4 @@ const AuthoritativeExecutionLayer = {
 // Expose directly to the global window context
 window.AuthoritativeExecutionLayer = AuthoritativeExecutionLayer;
 
-console.log("🔒 [SANDLOCK_CAPABILITIES] Sovereign execution layer bounded with 3 active SSOT contracts.");
+console.log("🔒 [TRIARII_CAPABILITIES] Sovereign execution layer bounded with 3 active SSOT contracts.");
