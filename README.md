@@ -17,6 +17,7 @@
 [![Coverage](https://img.shields.io/badge/coverage-98%25-10b981?style=flat-square)](https://github.com/AlexusPacicus/Triarii-Unlocked/blob/main/test/test_policy_engine.py)
 [![WASM](https://img.shields.io/badge/runtime-Pyodide%20WASM-00f2fe?style=flat-square)](https://pyodide.org)
 [![Bright Data](https://img.shields.io/badge/ingress-Bright%20Data-f97316?style=flat-square)](https://brightdata.com)
+[![LLM](https://img.shields.io/badge/inference-Featherless%20AI-7c3aed?style=flat-square)](https://featherless.ai)
 [![Latency](https://img.shields.io/badge/enforcement%20latency-12ms--25ms-10b981?style=flat-square)](#6-performance-and-enterprise-roi)
 [![Track](https://img.shields.io/badge/track-Security%20%26%20Compliance-ef4444?style=flat-square)](#)
 
