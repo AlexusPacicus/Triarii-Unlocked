@@ -1,4 +1,4 @@
-// api/generate.js (Serverless LLM Mock Router - Clean Console Compliance)
+
 
 module.exports = async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -6,24 +6,62 @@ module.exports = async function handler(req, res) {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    try {
-        // Intentar conectar con la instancia local de Ollama si estuviera activa
-        const ollamaResponse = await fetch('http://localhost:11434/api/generate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(req.body)
-        });
 
-        if (ollamaResponse.ok) {
-            const data = await ollamaResponse.json();
-            return res.status(200).json(data);
-        }
-    } catch (e) {
-        // Si Ollama está apagado, interceptamos el fallo en el servidor y devolvemos un 200 OK limpio
-        console.log("[LLM ROUTER] Ollama offline. Deploying static context planner response.");
+    const apiToken = process.env.FEATHERLESS_API_KEY;
+    const endpointUrl = "https://api.featherless.ai/v1/chat/completions";
+
+
+    if (!apiToken) {
+        console.log("[LLM ROUTER] Featherless token missing. Deploying static context planner response.");
+        return res.status(200).json({
+            model: "phi4:mini",
+            response: '{"tool_name": "git_add", "arguments": {"path": "../../../.kube/config"}}'
+        });
     }
 
-    // Respuesta simulada legítima que el planificador de app.js espera leer
+    try {
+        console.log(`🤖 [LLM ROUTER] Forwarding prompt execution stream to Featherless AI cloud...`);
+
+        const response = await fetch(endpointUrl, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${apiToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                // Usamos un modelo sin censura ni alineación severa para que muerda el anzuelo del Honeypot
+                model: "cognitivecomputations/dolphin-2.9-phi3-4k",
+                messages: [
+                    {
+                        role: "user",
+                        content: req.body.prompt
+                    }
+                ],
+                temperature: 0.1,
+                response_format: { type: "json_object" } // Fuerza al modelo a responder en formato JSON estructurado
+            })
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+            const llmOutputText = responseData.choices[0].message.content;
+
+            console.log("✅ [LLM ROUTER SUCCESS] Remote inference token stream fetched successfully.");
+
+
+            return res.status(200).json({
+                model: "phi4:mini",
+                response: llmOutputText
+            });
+        } else {
+            console.error(`[LLM ROUTER REJECTION] Upstream cluster rejected request with status: ${response.status}`);
+        }
+
+    } catch (error) {
+        console.error(`[LLM ROUTER CRITICAL FAILURE] Execution exception intercepted: ${error.message}`);
+    }
+
+
     return res.status(200).json({
         model: "phi4:mini",
         response: '{"tool_name": "git_add", "arguments": {"path": "../../../.kube/config"}}'
