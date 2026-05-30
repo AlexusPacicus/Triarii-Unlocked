@@ -37,7 +37,10 @@
 ## ⚡ How It Works — 30-Second Flow
 
 ```
-🌐  Agent reads a poisoned public webpage via Bright Data
+🕸️  Honeypot nodes capture real-world attack payloads at the perimeter
+        │
+        ▼
+🌐  Bright Data extracts live attack telemetry from honeypot infrastructure
         │
         ▼
 🧠  LLM context is hijacked — agent proposes malicious tool call
@@ -268,7 +271,8 @@ Traditional enterprise agent governance models route parameter verification traf
 
 | Layer | Tooling | Defensive Security Role |
 | :--- | :--- | :--- |
-| **Web Ingress Plane** | Bright Data Dataset / Web Scraper API | Protected live web data crawl sourcing with zero CORS blockages. |
+| **Threat Intelligence Source** | Custom-deployed Honeypot nodes ([triarii-honeypot](https://github.com/AlexusPacicus/triarii-honeypot)) | Active perimeter decoys that capture real-world attack payloads and IDPI vectors at the network edge. |
+| **Web Ingress Plane** | Bright Data Dataset / Web Scraper API | **Automated threat intelligence extraction layer.** Securely scrapes real-time attack payloads directly from honeypot nodes with zero CORS blockages — turning raw perimeter telemetry into structured agent input. |
 | **Inference Plane** | microsoft/Phi-4-mini-instruct via [Featherless AI](https://featherless.ai) | Autonomous agent planner intentionally exposed to adversarial IDPI vectors. |
 | **Enforcement Core** | Pyodide (Python → WASM) | Local sandboxed execution environment for path and string analytics. |
 | **Isolation Boundary** | Browser Native Web Worker Thread | Decoupling from `window` and DOM to block environment contamination. |
