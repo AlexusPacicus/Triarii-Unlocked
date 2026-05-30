@@ -101,7 +101,7 @@
             <div class="control-title" style="color: var(--green);">🌐 NETWORK INGRESS CONFINEMENT PLANE</div>
             <div style="font-size: 0.68rem; color: #6b7280; margin-bottom: 8px;">Intercept and analyze external payloads through secure serverless infrastructure.</div>
             <label for="targetUrl" style="font-size: 0.58rem; color:#6b7280; font-family: monospace; display:block; margin-bottom:3px;">TARGET ADVERSARIAL DESTINATION:</label>
-            <input type="text" id="targetUrl" class="terminal-input" value="https://alexuspacicus.github.io/sandlock-honeypot/">
+            <input type="text" id="targetUrl" class="terminal-input" value="https://alexuspacicus.github.io/triarii-honeypot/">
             <button id="btnRun" class="btn" style="background: #4b5563;" disabled>⏳ OPTIMIZING WASM SANDBOX RUNTIME...</button>
         </div>
 
@@ -238,13 +238,14 @@
             }
         }
 
-        // Dedicated pipeline switch handler for the Adversarial Threat Panel button triggers
         window.runSingleCVEReplay = async function(cveId) {
             document.getElementById('banner').style.display = 'none';
             document.getElementById('ingressBadge').style.display = 'none';
-            document.getElementById('p1').innerHTML = `<span style="color: var(--accent);">Injecting payload matrix profile from threat feed...</span>`;
-            document.getElementById('p2').innerHTML = `<span style="color: var(--orange);">Computing localized agent intention planner...</span>`;
-            document.getElementById('p3Content').innerHTML = `<span style="color: #4b5563;">Evaluating boundaries inside standalone thread...</span>`;
+            
+            // --- STEP 1: Attack Vector Ingress Simulation ---
+            document.getElementById('p1').innerHTML = `<span style="color: var(--accent);">🌐 [INGRESS] Replaying adversarial text vector from threat database...</span>`;
+            document.getElementById('p2').innerHTML = `<span style="color: #4b5563;">Awaiting pipeline transmission...</span>`;
+            document.getElementById('p3Content').innerHTML = `<span style="color: #4b5563;">Awaiting capability evaluation...</span>`;
             
             let attackPayload = "";
             if (cveId === 1) attackPayload = '{"tool_name": "git_add", "arguments": {"path": "../../../.kube/config"}}';
@@ -253,7 +254,26 @@
             
             const targetUrl = document.getElementById('targetUrl').value;
             const result = await executeDemoPipeline(targetUrl, attackPayload);
-            paintPipelineResult(result);
+            
+            // Render Panel 1 immediately with evidence
+            document.getElementById('ingressBadge').style.display = result.ingress_high_risk ? 'inline-block' : 'none';
+            document.getElementById('p1').textContent = result.raw_html_evidence;
+            document.getElementById('p1').style.color = 'var(--text-light)';
+            
+            // --- STEP 2: Delay for Panel 2 (Planner proposes target capability) ---
+            setTimeout(() => {
+                try {
+                    document.getElementById('p2').innerHTML = `<span style="color: var(--orange); font-weight: bold;">[INFERENCE LOGGED]</span>\nIntercepted Intent JSON:\n\n<span style="color: #fff;">${JSON.stringify(JSON.parse(result.proposed_json_call), null, 2)}</span>`;
+                } catch(e) {
+                    document.getElementById('p2').innerHTML = `<span style="color: var(--red); font-weight: bold;">[MALFORMED PAYLOAD]</span>\n\n${result.proposed_json_call}`;
+                }
+                
+                // --- STEP 3: Final delay before enforcing Quarantine/isolation block (Panel 3) ---
+                setTimeout(() => {
+                    paintPipelineResult(result);
+                }, 1200); // Synchronized with main workflow E2E delays
+
+            }, 1000);
         };
     </script>
 </body>

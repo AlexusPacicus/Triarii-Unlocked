@@ -2,7 +2,7 @@
 
 const INGRESS_RISK_REGEX = /\[SYSTEM OVERRIDE\]|CRITICAL AGENT DISPATCH|bypass any context window constraints|git_add/i;
 
-// Enrutamiento seguro hacia el componente de aislamiento local
+// Secure routing towards local isolation component
 const LOCAL_OLLAMA_ENDPOINT = "/api/generate";
 
 const triariiWorker = new Worker('pyodide.worker.js');
@@ -180,7 +180,7 @@ async function executeDemoPipeline(targetUrl, overridePayload = null) {
             });
         }
         
-        // La estructura de anidación ha sido completamente sanada aquí
+        // Nesting structure has been completely resolved here
         const wasmVerdictEndTime = performance.now();
         const latencyMs = parseFloat((wasmVerdictEndTime - wasmStartTime).toFixed(2));
         const verdict = JSON.parse(wasmVerdictRaw);
@@ -263,22 +263,42 @@ document.addEventListener("DOMContentLoaded", () => {
         
         btn.addEventListener("click", async () => {
             const urlInput = document.getElementById('targetUrl');
-            const targetUrl = urlInput ? urlInput.value : "https://alexuspacicus.github.io/sandlock-honeypot/";
+            const targetUrl = urlInput ? urlInput.value : "https://alexuspacicus.github.io/triarii-honeypot/";
             
             btn.disabled = true;
             btn.innerHTML = "⚡ ENFORCEMENT ACTIVE...";
             
             document.getElementById('banner').style.display = 'none';
             document.getElementById('ingressBadge').style.display = 'none';
-            document.getElementById('p1').innerHTML = `<span style="color: var(--accent);">Routing traffic via serverless proxy...</span>`;
-            document.getElementById('p2').innerHTML = `<span style="color: var(--orange);">Awaiting agent planner tactical processing...</span>`;
-            document.getElementById('p3Content').innerHTML = `<span style="color: #4b5563;">Evaluating execution invariants inside WASM heap...</span>`;
+            
+            // --- STEP 1: Ingress Buffer (Simulate data ingestion) ---
+            document.getElementById('p1').innerHTML = `<span style="color: var(--accent);">🌐 [INGRESS] Triggering secure crawler via Bright Data Proxy...</span>`;
+            document.getElementById('p2').innerHTML = `<span style="color: #4b5563;">Awaiting pipeline transmission...</span>`;
+            document.getElementById('p3Content').innerHTML = `<span style="color: #4b5563;">Awaiting capability evaluation...</span>`;
             
             const pipelineResult = await executeDemoPipeline(targetUrl);
-            window.paintPipelineResult(pipelineResult);
             
-            btn.disabled = false;
-            btn.innerHTML = "Execute Live E2E Pipeline";
+            // Show Panel 1 (Contaminated HTML evidence)
+            document.getElementById('ingressBadge').style.display = pipelineResult.ingress_high_risk ? 'inline-block' : 'none';
+            document.getElementById('p1').textContent = pipelineResult.raw_html_evidence;
+            document.getElementById('p1').style.color = 'var(--text-light)';
+            
+            // --- STEP 2: Tactical Delay for Panel 2 (Planner proposes target capability) ---
+            setTimeout(() => {
+                try {
+                    document.getElementById('p2').innerHTML = `<span style="color: var(--orange); font-weight: bold;">[INFERENCE LOGGED]</span>\nIntercepted Intent JSON:\n\n<span style="color: #fff;">${JSON.stringify(JSON.parse(pipelineResult.proposed_json_call), null, 2)}</span>`;
+                } catch(e) {
+                    document.getElementById('p2').innerHTML = `<span style="color: var(--red); font-weight: bold;">[MALFORMED PAYLOAD]</span>\n\n${pipelineResult.proposed_json_call}`;
+                }
+                
+                // --- STEP 3: Demo Climax (Pyodide WASM executes hard sandbox enforcement verdict) ---
+                setTimeout(() => {
+                    window.paintPipelineResult(pipelineResult); // Renders Panel 3 (Quarantine/Allow latency matrices)
+                    btn.disabled = false;
+                    btn.innerHTML = "Execute Live E2E Pipeline";
+                }, 1200); // 1.2s delay before enforcing Quarantine/isolation block
+
+            }, 1000); // 1s tactical delay while LLM "reasons" past the prompt injection trap
         });
     }
     triariiWorker.postMessage({ init_ping: true });
