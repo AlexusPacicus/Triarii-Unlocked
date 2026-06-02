@@ -20,6 +20,7 @@
 [![LLM](https://img.shields.io/badge/inference-Featherless%20AI-7c3aed?style=flat-square)](https://featherless.ai)
 [![Latency](https://img.shields.io/badge/enforcement%20latency-12ms--25ms-10b981?style=flat-square)](#6-performance-and-enterprise-roi)
 [![Track](https://img.shields.io/badge/track-Security%20%26%20Compliance-ef4444?style=flat-square)](#)
+[![License](https://img.shields.io/badge/license-MIT-22c55e?style=flat-square)](./LICENSE)
 
 <br/>
 
